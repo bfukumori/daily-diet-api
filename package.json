@@ -4,7 +4,9 @@
   "description": "API for diet control",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "author": "Bruno Fukumori",
   "license": "ISC",
