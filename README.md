@@ -4,7 +4,7 @@ API for register meals and manage diet.
 
 ## RFs
 
-- [] Should be able to create an user
+- [x] Should be able to create an user
 - [] Should be able to identify an user
 - [] Should be able to register a meal
 - [] Should be able to update a meal
@@ -21,7 +21,7 @@ API for register meals and manage diet.
 
 ## RNFs
 
-- [] User's password should ben encrypted
-- [] The data should be persisted in a SQLite DB
+- [x] User's password should be encrypted
+- [x] The data should be persisted in a SQLite DB
 - [] The user should be authenticated with a JWT
 - [] List should be paginated with 10 items per page
