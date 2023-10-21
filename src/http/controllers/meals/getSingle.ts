@@ -3,7 +3,7 @@ import { makeGetSingleMealService } from '@/services/factories/meals/make-get-si
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-export async function getSingle(req: FastifyRequest, reply: FastifyReply) {
+export async function getSingleMeal(req: FastifyRequest, reply: FastifyReply) {
   const queryParams = z.object({
     id: z.string().uuid(),
   });

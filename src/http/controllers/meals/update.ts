@@ -3,7 +3,7 @@ import { makeUpdateMealService } from '@/services/factories/meals/make-update-me
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-export async function update(req: FastifyRequest, reply: FastifyReply) {
+export async function updateMeal(req: FastifyRequest, reply: FastifyReply) {
   const bodySchema = z.object({
     name: z.string(),
     description: z.string(),

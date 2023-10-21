@@ -3,7 +3,7 @@ import { makeGetManyMealsService } from '@/services/factories/meals/make-get-man
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-export async function getMany(req: FastifyRequest, reply: FastifyReply) {
+export async function getManyMeals(req: FastifyRequest, reply: FastifyReply) {
   const querySchema = z.object({
     page: z.coerce.number().min(1).default(1),
   });
