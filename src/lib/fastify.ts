@@ -1,3 +1,4 @@
+import { mealRoutes } from '@/routes/meals';
 import { userRoutes } from '@/routes/user';
 import Fastify from 'fastify';
 import { ZodError } from 'zod';
@@ -5,6 +6,7 @@ import { ZodError } from 'zod';
 export const app = Fastify();
 
 app.register(userRoutes);
+app.register(mealRoutes);
 app.setErrorHandler((error, _req, reply) => {
   if (error instanceof ZodError) {
     return reply

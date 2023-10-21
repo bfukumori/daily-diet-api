@@ -22,9 +22,9 @@ model User {
 model Meal {
   id          String  @id @default(uuid())
   name        String
-  description String?
+  description String
   inDiet      Boolean
-  userId      String?
+  userId      String
 
   createdAt DateTime @default(now())
 
