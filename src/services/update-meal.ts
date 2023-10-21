@@ -3,6 +3,7 @@ import {
   IMealsRepository,
   UpdateParams,
 } from '@/repositories/meals-repository';
+import { NotFoundError } from './errors/NotFoundError';
 
 interface UpdateMealServiceResponse {
   meal: Meal;
@@ -17,13 +18,19 @@ export class UpdateMealService {
     description,
     id,
   }: UpdateParams): Promise<UpdateMealServiceResponse> {
-    const meal = await this.mealsRepository.update({
+    const meal = await this.mealsRepository.findByID(id);
+
+    if (!meal) {
+      throw new NotFoundError();
+    }
+
+    const updatedMeal = await this.mealsRepository.update({
       inDiet,
       name,
       description,
       id,
     });
 
-    return { meal };
+    return { meal: updatedMeal };
   }
 }

@@ -1,3 +1,4 @@
+import { NotFoundError } from '@/services/errors/NotFoundError';
 import { makeUpdateMealService } from '@/services/factories/meals/make-update-meal-service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
@@ -15,12 +16,18 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
   const { name, description, inDiet } = bodySchema.parse(req.body);
   const { id } = paramsSchema.parse(req.params);
 
-  const meal = await makeUpdateMealService().execute({
-    name,
-    description,
-    inDiet,
-    id,
-  });
+  try {
+    await makeUpdateMealService().execute({
+      name,
+      description,
+      inDiet,
+      id,
+    });
 
-  return reply.status(200).send(meal);
+    return reply.status(204).send();
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      return reply.status(404).send({ message: error.message });
+    }
+  }
 }
