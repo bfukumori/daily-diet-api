@@ -1,23 +1,18 @@
+import { createMeal } from '@/http/controllers/meals/create';
+import { deleteMeal } from '@/http/controllers/meals/delete';
+import { getManyMeals } from '@/http/controllers/meals/getMany';
+import { getSingleMeal } from '@/http/controllers/meals/getSingle';
+import { updateMeal } from '@/http/controllers/meals/update';
 import { FastifyInstance } from 'fastify';
 
 export async function mealRoutes(app: FastifyInstance) {
-  app.get('/meals', () => {
-    console.log('TODO: get all meals');
-  });
+  app.get('/meals', getManyMeals);
 
-  app.get('/meals/:id', () => {
-    console.log('TODO: get a meal');
-  });
+  app.get('/meals/:id', getSingleMeal);
 
-  app.post('/meals', () => {
-    console.log('TODO: register a meal');
-  });
+  app.post('/meals', createMeal);
 
-  app.put('/meals', () => {
-    console.log('TODO: update a meal');
-  });
+  app.put('/meals/:id', updateMeal);
 
-  app.delete('/meals', () => {
-    console.log('TODO: delete a meal');
-  });
+  app.delete('/meals/:id', deleteMeal);
 }
