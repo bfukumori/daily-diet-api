@@ -7,6 +7,7 @@ export const app = Fastify();
 
 app.register(userRoutes);
 app.register(mealRoutes);
+
 app.setErrorHandler((error, _req, reply) => {
   if (error instanceof ZodError) {
     return reply

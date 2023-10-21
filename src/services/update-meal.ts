@@ -17,6 +17,7 @@ export class UpdateMealService {
     name,
     description,
     id,
+    date,
   }: UpdateParams): Promise<UpdateMealServiceResponse> {
     const meal = await this.mealsRepository.findByID(id);
 
@@ -29,6 +30,7 @@ export class UpdateMealService {
       name,
       description,
       id,
+      date,
     });
 
     return { meal: updatedMeal };

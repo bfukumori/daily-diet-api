@@ -5,6 +5,7 @@ export interface CreateParams {
   description: string;
   inDiet: boolean;
   userId: string;
+  date: Date;
 }
 
 export interface UpdateParams {
@@ -12,6 +13,7 @@ export interface UpdateParams {
   name: string;
   description: string;
   inDiet: boolean;
+  date: Date;
 }
 
 export interface FindManyByUserIDParams {
@@ -22,7 +24,7 @@ export interface FindManyByUserIDParams {
 export interface IMealsRepository {
   create: (params: CreateParams) => Promise<Meal>;
   findByID: (id: string) => Promise<Meal | null>;
-  findManyByUserID: (params: FindManyByUserIDParams) => Promise<Meal[]>;
+  findManyByUserID: (params: FindManyByUserIDParams) => Promise<Meal[] | null>;
   update: (params: UpdateParams) => Promise<Meal>;
   delete: (id: string) => Promise<void>;
 }

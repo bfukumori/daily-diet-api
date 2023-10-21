@@ -16,12 +16,14 @@ export class RegisterMealService {
     name,
     description,
     userId,
+    date,
   }: CreateParams): Promise<RegisterMealServiceResponse> {
     const meal = await this.mealsRepository.create({
       inDiet,
       name,
       description,
       userId,
+      date,
     });
 
     return { meal };

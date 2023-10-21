@@ -15,6 +15,7 @@ export class PrismaMealsRepository implements IMealsRepository {
     name,
     description,
     userId,
+    date,
   }: CreateParams): Promise<Meal> {
     const meal = await prisma.meal.create({
       data: {
@@ -22,6 +23,7 @@ export class PrismaMealsRepository implements IMealsRepository {
         name,
         description,
         userId,
+        date,
       },
     });
 
@@ -53,12 +55,19 @@ export class PrismaMealsRepository implements IMealsRepository {
     return meals;
   }
 
-  async update({ inDiet, name, description, id }: UpdateParams): Promise<Meal> {
+  async update({
+    inDiet,
+    name,
+    description,
+    id,
+    date,
+  }: UpdateParams): Promise<Meal> {
     const meal = await prisma.meal.update({
       data: {
         inDiet,
         name,
         description,
+        date,
       },
       where: {
         id,

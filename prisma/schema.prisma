@@ -20,11 +20,12 @@ model User {
 }
 
 model Meal {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String
   inDiet      Boolean
   userId      String
+  date        DateTime
 
   createdAt DateTime @default(now())
 
