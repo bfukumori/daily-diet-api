@@ -1,8 +1,13 @@
 import { Meal } from '@/models/Meal';
-import {
-  CreateParams,
-  IMealsRepository,
-} from '@/repositories/meals-repository';
+import { IMealsRepository } from '@/repositories/meals-repository';
+
+interface RegisterMealServiceRequest {
+  name: string;
+  description: string;
+  inDiet: boolean;
+  userId: string;
+  date: Date;
+}
 
 interface RegisterMealServiceResponse {
   meal: Meal;
@@ -17,7 +22,7 @@ export class RegisterMealService {
     description,
     userId,
     date,
-  }: CreateParams): Promise<RegisterMealServiceResponse> {
+  }: RegisterMealServiceRequest): Promise<RegisterMealServiceResponse> {
     const meal = await this.mealsRepository.create({
       inDiet,
       name,

@@ -4,17 +4,17 @@ import { randomUUID } from 'node:crypto';
 import { DeleteMealService } from './delete-meal';
 import { NotFoundError } from './errors/NotFoundError';
 
-let inMemoryMealsRespository: InMemoryMealsRepository;
+let mealsRespository: InMemoryMealsRepository;
 let sut: DeleteMealService;
 
 describe.only('Delete meal service', () => {
   beforeEach(() => {
-    inMemoryMealsRespository = new InMemoryMealsRepository();
-    sut = new DeleteMealService(inMemoryMealsRespository);
+    mealsRespository = new InMemoryMealsRepository();
+    sut = new DeleteMealService(mealsRespository);
   });
 
   it('should be able to delete a specific meal', async () => {
-    await inMemoryMealsRespository.create({
+    await mealsRespository.create({
       name: 'Katsudon',
       description: 'Pork meat with rice',
       date: new Date(),
@@ -22,7 +22,7 @@ describe.only('Delete meal service', () => {
       userId: randomUUID(),
     });
 
-    const { id } = await inMemoryMealsRespository.create({
+    const { id } = await mealsRespository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),
@@ -32,7 +32,7 @@ describe.only('Delete meal service', () => {
 
     await sut.execute(id);
 
-    const meals = inMemoryMealsRespository.meals;
+    const meals = mealsRespository.meals;
     expect(meals).toHaveLength(1);
     expect(meals[0].name).toEqual('Katsudon');
   });

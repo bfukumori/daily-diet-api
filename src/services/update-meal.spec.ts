@@ -4,17 +4,17 @@ import { randomUUID } from 'node:crypto';
 import { UpdateMealService } from './update-meal';
 import { NotFoundError } from './errors/NotFoundError';
 
-let inMemoryMealsRespository: InMemoryMealsRepository;
+let mealsRespository: InMemoryMealsRepository;
 let sut: UpdateMealService;
 
 describe.only('Update meal service', () => {
   beforeEach(() => {
-    inMemoryMealsRespository = new InMemoryMealsRepository();
-    sut = new UpdateMealService(inMemoryMealsRespository);
+    mealsRespository = new InMemoryMealsRepository();
+    sut = new UpdateMealService(mealsRespository);
   });
 
   it('should be able to update a meal', async () => {
-    const { id } = await inMemoryMealsRespository.create({
+    const { id } = await mealsRespository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),

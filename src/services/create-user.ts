@@ -1,10 +1,13 @@
 import { UserAlreadyExistsError } from '@/services/errors/UserAlreadyExistsError';
 import { User } from '@/models/User';
-import {
-  CreateParams,
-  IUsersRepository,
-} from '@/repositories/users-repository';
+import { IUsersRepository } from '@/repositories/users-repository';
 import { hash } from 'bcryptjs';
+
+interface CreateUserServiceRequest {
+  email: string;
+  username: string;
+  password: string;
+}
 
 interface CreateUserServiceResponse {
   user: User;
@@ -17,7 +20,7 @@ export class CreateUserService {
     email,
     username,
     password,
-  }: CreateParams): Promise<CreateUserServiceResponse> {
+  }: CreateUserServiceRequest): Promise<CreateUserServiceResponse> {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
     if (userAlreadyExists) {

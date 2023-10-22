@@ -1,8 +1,10 @@
 import { Meal } from '@/models/Meal';
-import {
-  FindManyByUserIDParams,
-  IMealsRepository,
-} from '@/repositories/meals-repository';
+import { IMealsRepository } from '@/repositories/meals-repository';
+
+interface GetManyMealsServiceRequest {
+  userId: string;
+  page: number;
+}
 
 interface GetManyMealsServiceResponse {
   meals: Meal[];
@@ -14,7 +16,7 @@ export class GetManyMealsService {
   async execute({
     userId,
     page = 1,
-  }: FindManyByUserIDParams): Promise<GetManyMealsServiceResponse> {
+  }: GetManyMealsServiceRequest): Promise<GetManyMealsServiceResponse> {
     const meals = await this.mealsRepository.findManyByUserID({ userId, page });
 
     return { meals };

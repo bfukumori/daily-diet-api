@@ -4,13 +4,13 @@ import { CreateUserService } from './create-user';
 import { UserAlreadyExistsError } from './errors/UserAlreadyExistsError';
 import { compare } from 'bcryptjs';
 
-let inMemoryUsersRespository: InMemoryUsersRepository;
+let usersRespository: InMemoryUsersRepository;
 let sut: CreateUserService;
 
 describe('Register user service', () => {
   beforeEach(() => {
-    inMemoryUsersRespository = new InMemoryUsersRepository();
-    sut = new CreateUserService(inMemoryUsersRespository);
+    usersRespository = new InMemoryUsersRepository();
+    sut = new CreateUserService(usersRespository);
   });
 
   it('should be able to register an user', async () => {

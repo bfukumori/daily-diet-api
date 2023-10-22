@@ -2,17 +2,17 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { GetManyMealsService } from './get-many-meals';
 
-let inMemoryMealsRespository: InMemoryMealsRepository;
+let mealsRespository: InMemoryMealsRepository;
 let sut: GetManyMealsService;
 
 describe.only('Get many meals service', () => {
   beforeEach(() => {
-    inMemoryMealsRespository = new InMemoryMealsRepository();
-    sut = new GetManyMealsService(inMemoryMealsRespository);
+    mealsRespository = new InMemoryMealsRepository();
+    sut = new GetManyMealsService(mealsRespository);
   });
 
   it('should be able to list all meals from a user', async () => {
-    await inMemoryMealsRespository.create({
+    await mealsRespository.create({
       name: 'Katsudon',
       description: 'Pork meat with rice',
       date: new Date(),
@@ -20,7 +20,7 @@ describe.only('Get many meals service', () => {
       userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
     });
 
-    await inMemoryMealsRespository.create({
+    await mealsRespository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),
@@ -28,7 +28,7 @@ describe.only('Get many meals service', () => {
       userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
     });
 
-    await inMemoryMealsRespository.create({
+    await mealsRespository.create({
       name: 'Carbonara',
       description: 'Delicious spaghetti with pork and cheese',
       date: new Date(),
@@ -56,7 +56,7 @@ describe.only('Get many meals service', () => {
 
   it('should be able to list paginated meals', async () => {
     for (let i = 1; i <= 12; i++) {
-      await inMemoryMealsRespository.create({
+      await mealsRespository.create({
         name: `Meal-${i}`,
         description: 'Meal description',
         date: new Date(),

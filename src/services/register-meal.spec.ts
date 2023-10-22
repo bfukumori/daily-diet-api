@@ -3,13 +3,13 @@ import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meal
 import { RegisterMealService } from './register-meal';
 import { randomUUID } from 'node:crypto';
 
-let inMemoryMealsRespository: InMemoryMealsRepository;
+let mealsRespository: InMemoryMealsRepository;
 let sut: RegisterMealService;
 
 describe.only('Register meal service', () => {
   beforeEach(() => {
-    inMemoryMealsRespository = new InMemoryMealsRepository();
-    sut = new RegisterMealService(inMemoryMealsRespository);
+    mealsRespository = new InMemoryMealsRepository();
+    sut = new RegisterMealService(mealsRespository);
   });
 
   it('should be able to register a meal', async () => {
