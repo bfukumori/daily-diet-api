@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { GetSingleMealService } from './get-single-meal';
 import { randomUUID } from 'node:crypto';
+import { NotFoundError } from './errors/NotFoundError';
 
 let inMemoryMealsRespository: InMemoryMealsRepository;
 let sut: GetSingleMealService;
@@ -37,6 +38,12 @@ describe.only('Get single meal service', () => {
         name: 'Ramen',
         description: 'Noodles are the best',
       })
+    );
+  });
+
+  it('should not be able to list an inexistent meal', async () => {
+    await expect(() => sut.execute('inexistent id')).rejects.toBeInstanceOf(
+      NotFoundError
     );
   });
 });

@@ -24,4 +24,4 @@ API for register meals and manage diet.
 - [x] User's password should be encrypted
 - [x] The data should be persisted in a SQLite DB
 - [ ] The user should be authenticated with a JWT
-- [ ] List should be paginated with 10 items per page
+- [x] List should be paginated with 10 items per page

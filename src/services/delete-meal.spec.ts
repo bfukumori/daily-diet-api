@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { randomUUID } from 'node:crypto';
 import { DeleteMealService } from './delete-meal';
+import { NotFoundError } from './errors/NotFoundError';
 
 let inMemoryMealsRespository: InMemoryMealsRepository;
 let sut: DeleteMealService;
@@ -34,5 +35,11 @@ describe.only('Delete meal service', () => {
     const meals = inMemoryMealsRespository.meals;
     expect(meals).toHaveLength(1);
     expect(meals[0].name).toEqual('Katsudon');
+  });
+
+  it('should not be able to delete an inexistent meal', async () => {
+    await expect(() => sut.execute('inexistent id')).rejects.toBeInstanceOf(
+      NotFoundError
+    );
   });
 });

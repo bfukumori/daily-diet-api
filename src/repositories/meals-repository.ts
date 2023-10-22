@@ -24,7 +24,7 @@ export interface FindManyByUserIDParams {
 export interface IMealsRepository {
   create: (params: CreateParams) => Promise<Meal>;
   findByID: (id: string) => Promise<Meal | null>;
-  findManyByUserID: (params: FindManyByUserIDParams) => Promise<Meal[] | null>;
+  findManyByUserID: (params: FindManyByUserIDParams) => Promise<Meal[]>;
   update: (params: UpdateParams) => Promise<Meal>;
   delete: (id: string) => Promise<void>;
 }

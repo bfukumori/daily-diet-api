@@ -53,4 +53,31 @@ describe.only('Get many meals service', () => {
       }),
     ]);
   });
+
+  it('should be able to list paginated meals', async () => {
+    for (let i = 1; i <= 12; i++) {
+      await inMemoryMealsRespository.create({
+        name: `Meal-${i}`,
+        description: 'Meal description',
+        date: new Date(),
+        inDiet: false,
+        userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      });
+    }
+
+    const { meals } = await sut.execute({
+      userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      page: 2,
+    });
+
+    expect(meals).toHaveLength(2);
+    expect(meals).toEqual([
+      expect.objectContaining({
+        name: 'Meal-11',
+      }),
+      expect.objectContaining({
+        name: 'Meal-12',
+      }),
+    ]);
+  });
 });

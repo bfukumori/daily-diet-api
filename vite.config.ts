@@ -5,5 +5,8 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
+    coverage: {
+      provider: 'v8',
+    },
   },
 });
