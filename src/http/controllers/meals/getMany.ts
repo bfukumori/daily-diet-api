@@ -9,11 +9,12 @@ export async function getManyMeals(req: FastifyRequest, reply: FastifyReply) {
   });
 
   const { page } = querySchema.parse(req.query);
+  const userId = req.user.sub;
 
   try {
     const meals = await makeGetManyMealsService().execute({
       page,
-      userId: 'ca465052-72d7-4bb6-8dce-23f5ccfabbd2',
+      userId,
     });
     return reply.status(200).send(meals);
   } catch (error) {

@@ -4,17 +4,17 @@ import { GetSingleMealService } from './get-single-meal';
 import { randomUUID } from 'node:crypto';
 import { NotFoundError } from './errors/NotFoundError';
 
-let mealsRespository: InMemoryMealsRepository;
+let inMemoryMealsRespository: InMemoryMealsRepository;
 let sut: GetSingleMealService;
 
 describe.only('Get single meal service', () => {
   beforeEach(() => {
-    mealsRespository = new InMemoryMealsRepository();
-    sut = new GetSingleMealService(mealsRespository);
+    inMemoryMealsRespository = new InMemoryMealsRepository();
+    sut = new GetSingleMealService(inMemoryMealsRespository);
   });
 
   it('should be able to list a specific meal', async () => {
-    await mealsRespository.create({
+    await inMemoryMealsRespository.create({
       name: 'Katsudon',
       description: 'Pork meat with rice',
       date: new Date(),
@@ -22,7 +22,7 @@ describe.only('Get single meal service', () => {
       userId: randomUUID(),
     });
 
-    const { id } = await mealsRespository.create({
+    const { id } = await inMemoryMealsRespository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),

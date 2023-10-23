@@ -8,15 +8,19 @@ export async function createMeal(req: FastifyRequest, reply: FastifyReply) {
     description: z.string(),
     inDiet: z.boolean(),
     userId: z.string().uuid(),
+    date: z.string().datetime(),
   });
 
-  const { name, description, inDiet, userId } = bodySchema.parse(req.body);
+  const { name, description, inDiet, userId, date } = bodySchema.parse(
+    req.body
+  );
 
   await makeRegisterMealService().execute({
     name,
     description,
     inDiet,
     userId,
+    date: new Date(date),
   });
 
   return reply.status(201).send();
