@@ -1,6 +1,7 @@
 import { Meal } from '@/models/Meal';
 import { IMealsRepository } from '@/repositories/meals-repository';
 import { NotFoundError } from './errors/NotFoundError';
+import { UnauthorizedError } from './errors/UnauthorizedError';
 
 interface UpdateMealServiceRequest {
   id: string;
@@ -8,6 +9,7 @@ interface UpdateMealServiceRequest {
   description: string;
   inDiet: boolean;
   date: Date;
+  userId: string;
 }
 
 interface UpdateMealServiceResponse {
@@ -23,11 +25,16 @@ export class UpdateMealService {
     description,
     id,
     date,
+    userId,
   }: UpdateMealServiceRequest): Promise<UpdateMealServiceResponse> {
     const meal = await this.mealsRepository.findByID(id);
 
     if (!meal) {
       throw new NotFoundError();
+    }
+
+    if (meal.userId !== userId) {
+      throw new UnauthorizedError();
     }
 
     const updatedMeal = await this.mealsRepository.update({

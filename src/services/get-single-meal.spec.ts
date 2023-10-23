@@ -1,16 +1,28 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { GetSingleMealService } from './get-single-meal';
-import { randomUUID } from 'node:crypto';
 import { NotFoundError } from './errors/NotFoundError';
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
+import { UnauthorizedError } from './errors/UnauthorizedError';
 
+let usersRepository: InMemoryUsersRepository;
 let inMemoryMealsRespository: InMemoryMealsRepository;
 let sut: GetSingleMealService;
+let userId = '';
 
 describe.only('Get single meal service', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
     inMemoryMealsRespository = new InMemoryMealsRepository();
     sut = new GetSingleMealService(inMemoryMealsRespository);
+
+    const { id } = await usersRepository.create({
+      email: 'goku@gmail.com',
+      password: '123456',
+      username: 'Goku',
+    });
+
+    userId = id;
   });
 
   it('should be able to list a specific meal', async () => {
@@ -19,7 +31,7 @@ describe.only('Get single meal service', () => {
       description: 'Pork meat with rice',
       date: new Date(),
       inDiet: false,
-      userId: randomUUID(),
+      userId,
     });
 
     const { id } = await inMemoryMealsRespository.create({
@@ -27,10 +39,10 @@ describe.only('Get single meal service', () => {
       description: 'Noodles are the best',
       date: new Date(),
       inDiet: false,
-      userId: randomUUID(),
+      userId,
     });
 
-    const { meal } = await sut.execute(id);
+    const { meal } = await sut.execute({ id, userId });
 
     expect(meal).toEqual(
       expect.objectContaining({
@@ -42,8 +54,22 @@ describe.only('Get single meal service', () => {
   });
 
   it('should not be able to list an inexistent meal', async () => {
-    await expect(() => sut.execute('inexistent id')).rejects.toBeInstanceOf(
-      NotFoundError
-    );
+    await expect(() =>
+      sut.execute({ id: 'inexistent id', userId })
+    ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it("should not be able to list another's meal", async () => {
+    const { id } = await inMemoryMealsRespository.create({
+      name: 'Ramen',
+      description: 'Noodles are the best',
+      date: new Date(),
+      inDiet: false,
+      userId,
+    });
+
+    await expect(() =>
+      sut.execute({ id, userId: 'another-user-id' })
+    ).rejects.toBeInstanceOf(UnauthorizedError);
   });
 });

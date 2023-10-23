@@ -17,7 +17,7 @@ API for register meals and manage diet.
 
 - [x] Meals should have a name, description,date, time and a flag indicating if it's in diet or not.
 - [ ] User's metrics should contain total meals, total meals in diet, total meals out diet, best streak in diet
-- [ ] An user can only CRUD his own meals.
+- [x] An user can only CRUD his own meals.
 
 ## RNFs
 

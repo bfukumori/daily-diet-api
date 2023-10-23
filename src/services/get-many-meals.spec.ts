@@ -1,14 +1,26 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { GetManyMealsService } from './get-many-meals';
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
 
+let usersRepository: InMemoryUsersRepository;
 let mealsRespository: InMemoryMealsRepository;
 let sut: GetManyMealsService;
+let userId = '';
 
 describe.only('Get many meals service', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
     mealsRespository = new InMemoryMealsRepository();
     sut = new GetManyMealsService(mealsRespository);
+
+    const { id } = await usersRepository.create({
+      email: 'goku@gmail.com',
+      password: '123456',
+      username: 'Goku',
+    });
+
+    userId = id;
   });
 
   it('should be able to list all meals from a user', async () => {
@@ -17,7 +29,7 @@ describe.only('Get many meals service', () => {
       description: 'Pork meat with rice',
       date: new Date(),
       inDiet: false,
-      userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      userId,
     });
 
     await mealsRespository.create({
@@ -25,7 +37,7 @@ describe.only('Get many meals service', () => {
       description: 'Noodles are the best',
       date: new Date(),
       inDiet: false,
-      userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      userId,
     });
 
     await mealsRespository.create({
@@ -33,11 +45,11 @@ describe.only('Get many meals service', () => {
       description: 'Delicious spaghetti with pork and cheese',
       date: new Date(),
       inDiet: false,
-      userId: 'ca465052-72d7-4bb6-8dce-23f5ccfabbd2',
+      userId: 'another-user-id',
     });
 
     const { meals } = await sut.execute({
-      userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      userId,
       page: 1,
     });
 
@@ -46,10 +58,12 @@ describe.only('Get many meals service', () => {
       expect.objectContaining({
         name: 'Katsudon',
         description: 'Pork meat with rice',
+        userId,
       }),
       expect.objectContaining({
         name: 'Ramen',
         description: 'Noodles are the best',
+        userId,
       }),
     ]);
   });
@@ -61,12 +75,12 @@ describe.only('Get many meals service', () => {
         description: 'Meal description',
         date: new Date(),
         inDiet: false,
-        userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+        userId,
       });
     }
 
     const { meals } = await sut.execute({
-      userId: '30d5f00f-bb96-489f-a1af-d250ae85b2b0',
+      userId,
       page: 2,
     });
 
