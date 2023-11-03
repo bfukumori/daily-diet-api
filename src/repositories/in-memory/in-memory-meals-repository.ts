@@ -5,10 +5,24 @@ import {
   IMealsRepository,
   UpdateParams,
 } from '../meals-repository';
-import { Meal } from '@/models/Meal';
+import { Meal } from '@prisma/client';
 
 export class InMemoryMealsRepository implements IMealsRepository {
   public meals: Meal[] = [];
+
+  async totalInDiet(userId: string) {
+    const meals = this.meals.filter(
+      (meal) => meal.userId === userId && meal.inDiet === true
+    );
+
+    return meals.length;
+  }
+
+  async totalMeals(userId: string) {
+    const meals = this.meals.filter((meal) => meal.userId === userId);
+
+    return meals.length;
+  }
 
   async findByID(id: string) {
     const meal = this.meals.find((meal) => meal.id === id);

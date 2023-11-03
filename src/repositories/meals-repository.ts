@@ -1,4 +1,4 @@
-import { Meal } from '@/models/Meal';
+import { Meal } from '@prisma/client';
 
 export interface CreateParams {
   name: string;
@@ -27,4 +27,6 @@ export interface IMealsRepository {
   findManyByUserID: (params: FindManyByUserIDParams) => Promise<Meal[]>;
   update: (params: UpdateParams) => Promise<Meal>;
   delete: (id: string) => Promise<void>;
+  totalInDiet: (userId: string) => Promise<number>;
+  totalMeals: (userId: string) => Promise<number>;
 }

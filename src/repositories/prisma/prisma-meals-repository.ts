@@ -5,11 +5,9 @@ import {
   IMealsRepository,
   UpdateParams,
 } from '../meals-repository';
-import { Meal } from '@/models/Meal';
+import { Meal } from '@prisma/client';
 
 export class PrismaMealsRepository implements IMealsRepository {
-  public meals: Meal[] = [];
-
   async create({
     inDiet,
     name,
@@ -28,6 +26,27 @@ export class PrismaMealsRepository implements IMealsRepository {
     });
 
     return meal;
+  }
+
+  async totalMeals(userId: string): Promise<number> {
+    const meals = await prisma.meal.count({
+      where: {
+        userId,
+      },
+    });
+
+    return meals;
+  }
+
+  async totalInDiet(userId: string): Promise<number> {
+    const meals = await prisma.meal.count({
+      where: {
+        userId,
+        inDiet: true,
+      },
+    });
+
+    return meals;
   }
 
   async findByID(id: string): Promise<Meal | null> {

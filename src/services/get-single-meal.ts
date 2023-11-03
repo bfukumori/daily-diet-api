@@ -1,7 +1,7 @@
-import { Meal } from '@/models/Meal';
 import { IMealsRepository } from '@/repositories/meals-repository';
 import { NotFoundError } from './errors/NotFoundError';
 import { UnauthorizedError } from './errors/UnauthorizedError';
+import { Meal } from '@prisma/client';
 
 interface GetSingleMealServiceRequest {
   id: string;

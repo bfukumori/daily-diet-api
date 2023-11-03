@@ -1,7 +1,7 @@
 import { UserAlreadyExistsError } from '@/services/errors/UserAlreadyExistsError';
-import { User } from '@/models/User';
 import { IUsersRepository } from '@/repositories/users-repository';
 import { hash } from 'bcryptjs';
+import { User } from '@prisma/client';
 
 interface CreateUserServiceRequest {
   email: string;

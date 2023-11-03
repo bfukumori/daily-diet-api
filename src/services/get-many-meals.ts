@@ -1,4 +1,4 @@
-import { Meal } from '@/models/Meal';
+import { Meal } from '@prisma/client';
 import { IMealsRepository } from '@/repositories/meals-repository';
 
 interface GetManyMealsServiceRequest {

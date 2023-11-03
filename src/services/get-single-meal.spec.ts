@@ -6,15 +6,15 @@ import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user
 import { UnauthorizedError } from './errors/UnauthorizedError';
 
 let usersRepository: InMemoryUsersRepository;
-let inMemoryMealsRespository: InMemoryMealsRepository;
+let mealsRepository: InMemoryMealsRepository;
 let sut: GetSingleMealService;
 let userId = '';
 
-describe.only('Get single meal service', () => {
+describe('Get single meal service', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
-    inMemoryMealsRespository = new InMemoryMealsRepository();
-    sut = new GetSingleMealService(inMemoryMealsRespository);
+    mealsRepository = new InMemoryMealsRepository();
+    sut = new GetSingleMealService(mealsRepository);
 
     const { id } = await usersRepository.create({
       email: 'goku@gmail.com',
@@ -26,7 +26,7 @@ describe.only('Get single meal service', () => {
   });
 
   it('should be able to list a specific meal', async () => {
-    await inMemoryMealsRespository.create({
+    await mealsRepository.create({
       name: 'Katsudon',
       description: 'Pork meat with rice',
       date: new Date(),
@@ -34,7 +34,7 @@ describe.only('Get single meal service', () => {
       userId,
     });
 
-    const { id } = await inMemoryMealsRespository.create({
+    const { id } = await mealsRepository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),
@@ -60,7 +60,7 @@ describe.only('Get single meal service', () => {
   });
 
   it("should not be able to list another's meal", async () => {
-    const { id } = await inMemoryMealsRespository.create({
+    const { id } = await mealsRepository.create({
       name: 'Ramen',
       description: 'Noodles are the best',
       date: new Date(),

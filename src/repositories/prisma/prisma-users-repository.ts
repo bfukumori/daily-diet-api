@@ -1,9 +1,42 @@
-import { User } from '@/models/User';
-import { CreateParams, IUsersRepository } from '../users-repository';
+import { User } from '@prisma/client';
+import {
+  CreateParams,
+  IUsersRepository,
+  UpdateParams,
+} from '../users-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaUsersRepository implements IUsersRepository {
-  public users: User[] = [];
+  async getMetrics(
+    userId: string
+  ): Promise<Pick<User, 'bestStreak' | 'currentStreak'> | null> {
+    const metrics = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        bestStreak: true,
+        currentStreak: true,
+      },
+    });
+    return metrics;
+  }
+
+  async updateUser({
+    userId,
+    bestStreak,
+    currentStreak,
+  }: UpdateParams): Promise<void> {
+    await prisma.user.update({
+      data: {
+        bestStreak,
+        currentStreak,
+      },
+      where: {
+        id: userId,
+      },
+    });
+  }
 
   async findByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({

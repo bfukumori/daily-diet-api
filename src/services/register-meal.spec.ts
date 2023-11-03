@@ -1,15 +1,26 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { RegisterMealService } from './register-meal';
-import { randomUUID } from 'node:crypto';
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
 
-let mealsRespository: InMemoryMealsRepository;
+let mealsRepository: InMemoryMealsRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: RegisterMealService;
+let userId = '';
 
-describe.only('Register meal service', () => {
-  beforeEach(() => {
-    mealsRespository = new InMemoryMealsRepository();
-    sut = new RegisterMealService(mealsRespository);
+describe('Get single meal service', () => {
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    mealsRepository = new InMemoryMealsRepository();
+    sut = new RegisterMealService(mealsRepository, usersRepository);
+
+    const { id } = await usersRepository.create({
+      email: 'goku@gmail.com',
+      password: '123456',
+      username: 'Goku',
+    });
+
+    userId = id;
   });
 
   it('should be able to register a meal', async () => {
@@ -18,7 +29,7 @@ describe.only('Register meal service', () => {
       description: 'Noodles are the best',
       date: new Date(),
       inDiet: false,
-      userId: randomUUID(),
+      userId,
     });
 
     expect(meal.id).toEqual(expect.any(String));

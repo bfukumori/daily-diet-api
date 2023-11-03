@@ -8,11 +8,13 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  username String
-  password String
-  meals    Meal[]
+  id            String @id @default(uuid())
+  email         String @unique
+  username      String
+  password      String
+  meals         Meal[]
+  currentStreak Int    @default(0)
+  bestStreak    Int    @default(0)
 
   createdAt DateTime @default(now())
 

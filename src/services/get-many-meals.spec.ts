@@ -8,7 +8,7 @@ let mealsRespository: InMemoryMealsRepository;
 let sut: GetManyMealsService;
 let userId = '';
 
-describe.only('Get many meals service', () => {
+describe('Get many meals service', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     mealsRespository = new InMemoryMealsRepository();
