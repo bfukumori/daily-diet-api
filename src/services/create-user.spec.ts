@@ -3,14 +3,17 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { CreateUserService } from './create-user';
 import { UserAlreadyExistsError } from './errors/UserAlreadyExistsError';
 import { compare } from 'bcryptjs';
+import { InMemoryMetricsRepository } from '@/repositories/in-memory/in-memory-get-user-metrics-repository';
 
 let usersRespository: InMemoryUsersRepository;
+let metricsRespository: InMemoryMetricsRepository;
 let sut: CreateUserService;
 
 describe('Register user service', () => {
   beforeEach(() => {
     usersRespository = new InMemoryUsersRepository();
-    sut = new CreateUserService(usersRespository);
+    metricsRespository = new InMemoryMetricsRepository();
+    sut = new CreateUserService(usersRespository, metricsRespository);
   });
 
   it('should be able to register an user', async () => {

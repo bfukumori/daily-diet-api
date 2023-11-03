@@ -1,7 +1,7 @@
 import { IMealsRepository } from '@/repositories/meals-repository';
-import { IUsersRepository } from '@/repositories/users-repository';
 import { Meal } from '@prisma/client';
 import { NotFoundError } from './errors/NotFoundError';
+import { IMetricsRepository } from '@/repositories/metrics-repository';
 
 interface RegisterMealServiceRequest {
   name: string;
@@ -18,7 +18,7 @@ interface RegisterMealServiceResponse {
 export class RegisterMealService {
   constructor(
     private mealsRepository: IMealsRepository,
-    private usersRepository: IUsersRepository
+    private metricsRepository: IMetricsRepository
   ) {}
 
   async execute({
@@ -28,12 +28,6 @@ export class RegisterMealService {
     userId,
     date,
   }: RegisterMealServiceRequest): Promise<RegisterMealServiceResponse> {
-    const metrics = await this.usersRepository.getMetrics(userId);
-
-    if (!metrics) {
-      throw new NotFoundError();
-    }
-
     const meal = await this.mealsRepository.create({
       inDiet,
       name,
@@ -41,6 +35,12 @@ export class RegisterMealService {
       userId,
       date,
     });
+
+    const metrics = await this.metricsRepository.getuserMetrics(userId);
+
+    if (!metrics) {
+      throw new NotFoundError();
+    }
 
     const { bestStreak, currentStreak } = metrics;
 
@@ -57,8 +57,8 @@ export class RegisterMealService {
       tempBest = tempCurrent;
     }
 
-    await this.usersRepository.updateUser({
-      userId,
+    await this.metricsRepository.updateMetrics({
+      id: metrics.id,
       bestStreak: tempBest,
       currentStreak: tempCurrent,
     });

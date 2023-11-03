@@ -2,9 +2,8 @@ import { NotFoundError } from '@/services/errors/NotFoundError';
 import { makeGetUserMetricsService } from '@/services/factories/users/make-get-user-metrics-service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-export async function metrics(req: FastifyRequest, reply: FastifyReply) {
+export async function getUserMetrics(req: FastifyRequest, reply: FastifyReply) {
   const userId = req.user.sub;
-
   try {
     const { metrics } = await makeGetUserMetricsService().execute({
       userId,

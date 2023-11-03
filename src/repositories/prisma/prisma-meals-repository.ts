@@ -1,47 +1,41 @@
 import { prisma } from '@/lib/prisma';
 import {
-  CreateParams,
+  CreateMealParams,
   FindManyByUserIDParams,
   IMealsRepository,
-  UpdateParams,
 } from '../meals-repository';
-import { Meal } from '@prisma/client';
+import { Meal, Prisma } from '@prisma/client';
 
 export class PrismaMealsRepository implements IMealsRepository {
   async create({
     inDiet,
     name,
     description,
-    userId,
     date,
-  }: CreateParams): Promise<Meal> {
+    userId,
+  }: CreateMealParams): Promise<Meal> {
     const meal = await prisma.meal.create({
       data: {
         inDiet,
         name,
         description,
-        userId,
         date,
+        userId,
       },
     });
 
     return meal;
   }
 
-  async totalMeals(userId: string): Promise<number> {
-    const meals = await prisma.meal.count({
-      where: {
-        userId,
-      },
-    });
+  async totalMeals(): Promise<number> {
+    const meals = await prisma.meal.count();
 
     return meals;
   }
 
-  async totalInDiet(userId: string): Promise<number> {
+  async totalInDiet(): Promise<number> {
     const meals = await prisma.meal.count({
       where: {
-        userId,
         inDiet: true,
       },
     });
@@ -74,26 +68,13 @@ export class PrismaMealsRepository implements IMealsRepository {
     return meals;
   }
 
-  async update({
-    inDiet,
-    name,
-    description,
-    id,
-    date,
-  }: UpdateParams): Promise<Meal> {
-    const meal = await prisma.meal.update({
-      data: {
-        inDiet,
-        name,
-        description,
-        date,
-      },
+  async update(data: Prisma.MealUpdateInput): Promise<Meal> {
+    return await prisma.meal.update({
+      data,
       where: {
-        id,
+        id: data.id as string,
       },
     });
-
-    return meal;
   }
 
   async delete(id: string): Promise<void> {

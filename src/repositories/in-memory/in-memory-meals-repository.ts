@@ -1,27 +1,23 @@
 import { randomUUID } from 'node:crypto';
 import {
-  CreateParams,
+  CreateMealParams,
   FindManyByUserIDParams,
   IMealsRepository,
-  UpdateParams,
+  UpdateMealParams,
 } from '../meals-repository';
 import { Meal } from '@prisma/client';
 
 export class InMemoryMealsRepository implements IMealsRepository {
   public meals: Meal[] = [];
 
-  async totalInDiet(userId: string) {
-    const meals = this.meals.filter(
-      (meal) => meal.userId === userId && meal.inDiet === true
-    );
+  async totalInDiet() {
+    const meals = this.meals.filter((meal) => meal.inDiet === true);
 
     return meals.length;
   }
 
-  async totalMeals(userId: string) {
-    const meals = this.meals.filter((meal) => meal.userId === userId);
-
-    return meals.length;
+  async totalMeals() {
+    return this.meals.length;
   }
 
   async findByID(id: string) {
@@ -40,7 +36,7 @@ export class InMemoryMealsRepository implements IMealsRepository {
       .slice((page - 1) * 10, 10 * page);
   }
 
-  async update({ description, id, inDiet, name, date }: UpdateParams) {
+  async update({ description, id, inDiet, name, date }: UpdateMealParams) {
     const mealIndex = this.meals.findIndex((meal) => meal.id === id);
 
     if (mealIndex >= 0) {
@@ -53,15 +49,14 @@ export class InMemoryMealsRepository implements IMealsRepository {
     return this.meals[mealIndex];
   }
 
-  async create({ description, inDiet, name, userId, date }: CreateParams) {
+  async create({ description, inDiet, name, date, userId }: CreateMealParams) {
     const meal = {
       id: randomUUID(),
       name,
       description,
       inDiet,
-      meals: [],
-      userId,
       date,
+      userId,
       createdAt: new Date(),
     };
 

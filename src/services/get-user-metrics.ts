@@ -1,6 +1,6 @@
 import { IMealsRepository } from '@/repositories/meals-repository';
 import { NotFoundError } from './errors/NotFoundError';
-import { IUsersRepository } from '@/repositories/users-repository';
+import { IMetricsRepository } from '@/repositories/metrics-repository';
 
 interface GetUserMetricsServiceRequest {
   userId: string;
@@ -18,20 +18,20 @@ interface GetUserMetricsServiceResponse {
 
 export class GetUserMetricsService {
   constructor(
-    private usersRepository: IUsersRepository,
+    private metricsRepository: IMetricsRepository,
     private mealsRepository: IMealsRepository
   ) {}
 
   async execute({
     userId,
   }: GetUserMetricsServiceRequest): Promise<GetUserMetricsServiceResponse> {
-    const metrics = this.usersRepository.getMetrics(userId);
-    const totalMeals = this.mealsRepository.totalMeals(userId);
-    const totalInDiet = this.mealsRepository.totalInDiet(userId);
+    const metrics = this.metricsRepository.getuserMetrics(userId);
+    const totalMeals = this.mealsRepository.totalMeals();
+    const totalInDiet = this.mealsRepository.totalInDiet();
 
     const totals = await Promise.all([totalMeals, totalInDiet, metrics]);
 
-    if (!totals[0] || !totals[1] || !totals[2]) {
+    if (!totals[2]) {
       throw new NotFoundError();
     }
 

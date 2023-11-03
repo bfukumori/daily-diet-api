@@ -2,6 +2,7 @@ import { UserAlreadyExistsError } from '@/services/errors/UserAlreadyExistsError
 import { IUsersRepository } from '@/repositories/users-repository';
 import { hash } from 'bcryptjs';
 import { User } from '@prisma/client';
+import { IMetricsRepository } from '@/repositories/metrics-repository';
 
 interface CreateUserServiceRequest {
   email: string;
@@ -14,7 +15,10 @@ interface CreateUserServiceResponse {
 }
 
 export class CreateUserService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    private usersRepository: IUsersRepository,
+    private metricsRepository: IMetricsRepository
+  ) {}
 
   async execute({
     email,
@@ -34,6 +38,8 @@ export class CreateUserService {
       username,
       password: passwordHash,
     });
+
+    await this.metricsRepository.createMetrics(user.id);
 
     return { user };
   }

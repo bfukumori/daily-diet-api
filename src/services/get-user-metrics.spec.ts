@@ -2,9 +2,11 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryMealsRepository } from '@/repositories/in-memory/in-memory-meals-repository';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
 import { GetUserMetricsService } from './get-user-metrics';
+import { InMemoryMetricsRepository } from '@/repositories/in-memory/in-memory-get-user-metrics-repository';
 
 let mealsRepository: InMemoryMealsRepository;
 let usersRepository: InMemoryUsersRepository;
+let metricsRepository: InMemoryMetricsRepository;
 let sut: GetUserMetricsService;
 let userId = '';
 
@@ -12,7 +14,8 @@ describe("Get user's metrics", () => {
   beforeEach(async () => {
     mealsRepository = new InMemoryMealsRepository();
     usersRepository = new InMemoryUsersRepository();
-    sut = new GetUserMetricsService(usersRepository, mealsRepository);
+    metricsRepository = new InMemoryMetricsRepository();
+    sut = new GetUserMetricsService(metricsRepository, mealsRepository);
 
     const { id } = await usersRepository.create({
       email: 'goku@gmail.com',
@@ -21,6 +24,8 @@ describe("Get user's metrics", () => {
     });
 
     userId = id;
+
+    const { id: metricId } = await metricsRepository.createMetrics(userId);
 
     await mealsRepository.create({
       name: 'Katsudon',
@@ -52,6 +57,12 @@ describe("Get user's metrics", () => {
       date: new Date(),
       inDiet: true,
       userId,
+    });
+
+    await metricsRepository.updateMetrics({
+      bestStreak: 2,
+      currentStreak: 1,
+      id: metricId,
     });
   });
 

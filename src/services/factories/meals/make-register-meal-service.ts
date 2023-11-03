@@ -1,13 +1,13 @@
+import { PrismaGetUserMetricsRepository } from '@/repositories/prisma/prisma-get-user-metrics-repository';
 import { PrismaMealsRepository } from '@/repositories/prisma/prisma-meals-repository';
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository';
 import { RegisterMealService } from '@/services/register-meal';
 
 export function makeRegisterMealService() {
   const mealsRepository = new PrismaMealsRepository();
-  const usersRepository = new PrismaUsersRepository();
+  const metricsRepository = new PrismaGetUserMetricsRepository();
   const registerMealService = new RegisterMealService(
     mealsRepository,
-    usersRepository
+    metricsRepository
   );
 
   return registerMealService;
